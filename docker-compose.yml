@@ -12,5 +12,15 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
 
+  jaeger:    # observabalidade em dev => grafana é uma basuca com muitos outros items
+    image: jaegertracing/all-in-one:1.57
+    container_name: jaeger
+    ports:
+      - "16686:16686"  # UI
+      - "6831:6831/udp"  # Traces UDP
+      - "14628:14628"  # Traces HTTP
+      - "4317:4317"  # OTLP/GRPC => openTelemetry
+      - "4318:4318"  # OTLP/HTTP => openTelemetry
+
 volumes:
   rabbitmq_data:
