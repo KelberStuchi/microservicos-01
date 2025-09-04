@@ -3,7 +3,7 @@ version: '3.8'
 services:
   pg:
     image: bitnami/postgresql:latest
-    container_name: microservicos-01
+    container_name: microservicos-01-orders
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
