@@ -22,5 +22,29 @@ services:
       - "4317:4317"  # OTLP/GRPC => openTelemetry
       - "4318:4318"  # OTLP/HTTP => openTelemetry
 
+  api-gateway:
+    image: kong:3.9
+    container_name: api-gateway
+    environment:
+      KONG_DATABASE: 'off'  # off por que no config.yaml fará declarativamente o /orders /invoices
+      KONG_ADMIN_LISTEN: '0.0.0.0:8001'
+      KONG_ADMIN_GUI_URL: 'http://localhost:8002'
+      KONG_DECLARATIVE_CONFIG: '/kong/config.yml'
+    
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # para que o kong consiga acessar o meu localhost 
+
+    volumes:
+      - ./docker/kong/config.yaml:/kong/config.yml
+      
+    ports:
+      - "8000:8000"  # Proxy HTTP API => /orders
+      - "8001:8001"  # Admin GUI
+      - "8002:8002"  # UI Admin
+      - "8443:8443"  # Proxy SSL (HTTPs)
+      - "8444:8444"  # API Admin com SSL (HTTPs)
+
+
+
 volumes:
   rabbitmq_data:
